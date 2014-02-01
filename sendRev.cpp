@@ -1,5 +1,5 @@
 /*
- Usage: ./send <systemCode> <unitCode> <command>
+ Usage: ./sendRev <systemCode> <unitCode> <command>
  Command is 0 for OFF and 1 for ON
  */
 

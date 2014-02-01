@@ -1,6 +1,5 @@
 /*
- Usage: ./send <systemCode> <unitCode> <command>
- Command is 0 for OFF and 1 for ON
+ Usage: ./sendTriState <String>
  */
 
 #include "RCSwitch.h"
