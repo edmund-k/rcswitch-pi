@@ -63,29 +63,29 @@ class RCSwitch {
     
     void switchOn(int nGroupNumber, int nSwitchNumber);
     void switchOff(int nGroupNumber, int nSwitchNumber);
-    void switchOn(char* sGroup, int nSwitchNumber);
-    void switchOff(char* sGroup, int nSwitchNumber);
+    void switchOn(const char* sGroup, int nSwitchNumber);
+    void switchOff(const char* sGroup, int nSwitchNumber);
     void switchOn(char sFamily, int nGroup, int nDevice);
     void switchOff(char sFamily, int nGroup, int nDevice);
-    void switchOn(char* sGroup, char* sDevice);
-    void switchOff(char* sGroup, char* sDevice);
+    void switchOn(const char* sGroup, const char* sDevice);
+    void switchOff(const char* sGroup, const char* sDevice);
     void switchOn(char sGroup, int nDevice);
     void switchOff(char sGroup, int nDevice);
     
-    void sendTriState(char* Code);
+    void sendTriState(const char* Code);
     void send(unsigned long Code, unsigned int length);
-    void send(char* Code);
+    void send(const char* Code);
     
     void enableReceive(int interrupt);
     void enableReceive();
     void disableReceive();
     bool available();
-  void resetAvailable();
+    void resetAvailable();
   
     unsigned long getReceivedValue();
     unsigned int getReceivedBitlength();
     unsigned int getReceivedDelay();
-  unsigned int getReceivedProtocol();
+    unsigned int getReceivedProtocol();
     unsigned int* getReceivedRawdata();
   
     void enableTransmit(int nTransmitterPin);
@@ -93,15 +93,15 @@ class RCSwitch {
     void setPulseLength(int nPulseLength);
     void setRepeatTransmit(int nRepeatTransmit);
     void setReceiveTolerance(int nPercent);
-  void setProtocol(int nProtocol);
-  void setProtocol(int nProtocol, int nPulseLength);
+    void setProtocol(int nProtocol);
+    void setProtocol(int nProtocol, int nPulseLength);
   
   private:
-    char* getCodeWordB(int nGroupNumber, int nSwitchNumber, boolean bStatus);
-    char* getCodeWordA(char* sGroup, int nSwitchNumber, boolean bStatus);
-    char* getCodeWordA(char* sGroup, char* sDevice, boolean bStatus);
-    char* getCodeWordC(char sFamily, int nGroup, int nDevice, boolean bStatus);
-    char* getCodeWordD(char group, int nDevice, boolean bStatus);
+    const char* getCodeWordB(int nGroupNumber, int nSwitchNumber, boolean bStatus);
+    const char* getCodeWordA(const char* sGroup, int nSwitchNumber, boolean bStatus);
+    const char* getCodeWordA(const char* sGroup, const char* sDevice, boolean bStatus);
+    const char* getCodeWordC(char sFamily, int nGroup, int nDevice, boolean bStatus);
+    const char* getCodeWordD(char group, int nDevice, boolean bStatus);
     void sendT0();
     void sendT1();
     void sendTF();
@@ -110,13 +110,13 @@ class RCSwitch {
     void sendSync();
     void transmit(int nHighPulses, int nLowPulses);
 
-    static char* dec2binWzerofill(unsigned long dec, unsigned int length);
-    static char* dec2binWcharfill(unsigned long dec, unsigned int length, char fill);
+    static const char* dec2binWzerofill(unsigned long dec, unsigned int length);
+    static const char* dec2binWcharfill(unsigned long dec, unsigned int length, char fill);
  
     static void handleInterrupt();
-  static bool receiveProtocol1(unsigned int changeCount);
-  static bool receiveProtocol2(unsigned int changeCount);
-  static bool receiveProtocol3(unsigned int changeCount);
+    static bool receiveProtocol1(unsigned int changeCount);
+    static bool receiveProtocol2(unsigned int changeCount);
+    static bool receiveProtocol3(unsigned int changeCount);
     int nReceiverInterrupt;
     int nTransmitterPin;
     int nPulseLength;

@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
      for pin mapping of the raspberry pi GPIO connector
      */
     int PIN = 0;
-    char* tristate = argv[1];
+    const char* tristate = argv[1];
     
     if (wiringPiSetup () == -1) return 1;
 	printf("sending tristate[%s] \n", tristate);

@@ -172,26 +172,26 @@ void RCSwitch::switchOff(int nAddressCode, int nChannelCode) {
 }
 
 /**
- * Deprecated, use switchOn(char* sGroup, char* sDevice) instead!
+ * Deprecated, use switchOn(const char* sGroup, const char* sDevice) instead!
  * Switch a remote switch on (Type A with 10 pole DIP switches)
  *
  * @param sGroup        Code of the switch group (refers to DIP switches 1..5 where "1" = on and "0" = off, if all DIP switches are on it's "11111")
  * @param nChannelCode  Number of the switch itself (1..5)
  */
-void RCSwitch::switchOn(char* sGroup, int nChannel) {
-  char* code[6] = { "00000", "10000", "01000", "00100", "00010", "00001" };
+void RCSwitch::switchOn(const char* sGroup, int nChannel) {
+  const char* code[6] = { "00000", "10000", "01000", "00100", "00010", "00001" };
   this->switchOn(sGroup, code[nChannel]);
 }
 
 /**
- * Deprecated, use switchOff(char* sGroup, char* sDevice) instead!
+ * Deprecated, use switchOff(const char* sGroup, const char* sDevice) instead!
  * Switch a remote switch off (Type A with 10 pole DIP switches)
  *
  * @param sGroup        Code of the switch group (refers to DIP switches 1..5 where "1" = on and "0" = off, if all DIP switches are on it's "11111")
  * @param nChannelCode  Number of the switch itself (1..5)
  */
-void RCSwitch::switchOff(char* sGroup, int nChannel) {
-  char* code[6] = { "00000", "10000", "01000", "00100", "00010", "00001" };
+void RCSwitch::switchOff(const char* sGroup, int nChannel) {
+  const char* code[6] = { "00000", "10000", "01000", "00100", "00010", "00001" };
   this->switchOff(sGroup, code[nChannel]);
 }
 
@@ -201,7 +201,7 @@ void RCSwitch::switchOff(char* sGroup, int nChannel) {
  * @param sGroup        Code of the switch group (refers to DIP switches 1..5 where "1" = on and "0" = off, if all DIP switches are on it's "11111")
  * @param sDevice       Code of the switch device (refers to DIP switches 6..10 (A..E) where "1" = on and "0" = off, if all DIP switches are on it's "11111")
  */
-void RCSwitch::switchOn(char* sGroup, char* sDevice) {
+void RCSwitch::switchOn(const char* sGroup, const char* sDevice) {
     this->sendTriState( this->getCodeWordA(sGroup, sDevice, true) );
 }
 
@@ -211,7 +211,7 @@ void RCSwitch::switchOn(char* sGroup, char* sDevice) {
  * @param sGroup        Code of the switch group (refers to DIP switches 1..5 where "1" = on and "0" = off, if all DIP switches are on it's "11111")
  * @param sDevice       Code of the switch device (refers to DIP switches 6..10 (A..E) where "1" = on and "0" = off, if all DIP switches are on it's "11111")
  */
-void RCSwitch::switchOff(char* sGroup, char* sDevice) {
+void RCSwitch::switchOff(const char* sGroup, const char* sDevice) {
     this->sendTriState( this->getCodeWordA(sGroup, sDevice, false) );
 }
 
@@ -231,11 +231,11 @@ void RCSwitch::switchOff(char* sGroup, char* sDevice) {
  *
  * @return char[13]
  */
-char* RCSwitch::getCodeWordB(int nAddressCode, int nChannelCode, boolean bStatus) {
+const char* RCSwitch::getCodeWordB(int nAddressCode, int nChannelCode, boolean bStatus) {
    int nReturnPos = 0;
    static char sReturn[13];
 
-   char* code[5] = { "FFFF", "0FFF", "F0FF", "FF0F", "FFF0" };
+   const char* code[5] = { "FFFF", "0FFF", "F0FF", "FF0F", "FFF0" };
    if (nAddressCode < 1 || nAddressCode > 4 || nChannelCode < 1 || nChannelCode > 4) {
     return '\0';
    }
@@ -265,10 +265,10 @@ char* RCSwitch::getCodeWordB(int nAddressCode, int nChannelCode, boolean bStatus
 /**
  * Returns a char[13], representing the Code Word to be send.
  *
- * getCodeWordA(char*, char*)
+ * getCodeWordA(const char*, const char*)
  *
  */
-char* RCSwitch::getCodeWordA(char* sGroup, char* sDevice, boolean bOn) {
+const char* RCSwitch::getCodeWordA(const char* sGroup, const char* sDevice, boolean bOn) {
     static char sDipSwitches[13];
     int i = 0;
     int j = 0;
@@ -305,7 +305,7 @@ char* RCSwitch::getCodeWordA(char* sGroup, char* sDevice, boolean bOn) {
 /**
  * Like getCodeWord (Type C = Intertechno)
  */
-char* RCSwitch::getCodeWordC(char sFamily, int nGroup, int nDevice, boolean bStatus) {
+const char* RCSwitch::getCodeWordC(char sFamily, int nGroup, int nDevice, boolean bStatus) {
   static char sReturn[13];
   int nReturnPos = 0;
 
@@ -313,7 +313,7 @@ char* RCSwitch::getCodeWordC(char sFamily, int nGroup, int nDevice, boolean bSta
     return '\0';
   }
 
-  char* sDeviceGroupCode =  dec2binWzerofill(  (nDevice-1) + (nGroup-1)*4, 4  );
+  const char* sDeviceGroupCode =  dec2binWzerofill(  (nDevice-1) + (nGroup-1)*4, 4  );
   char familycode[16][5] = { "0000", "F000", "0F00", "FF00", "00F0", "F0F0", "0FF0", "FFF0", "000F", "F00F", "0F0F", "FF0F", "00FF", "F0FF", "0FFF", "FFFF" };
   for (int i = 0; i<4; i++) {
     sReturn[nReturnPos++] = familycode[ (int)sFamily - 97 ][i];
@@ -354,13 +354,13 @@ char* RCSwitch::getCodeWordC(char sFamily, int nGroup, int nDevice, boolean bSta
  * @return char[13]
  */
 
-char* RCSwitch::getCodeWordD(char sGroup, int nDevice, boolean bStatus){
+const char* RCSwitch::getCodeWordD(char sGroup, int nDevice, boolean bStatus){
     static char sReturn[13];
     int nReturnPos = 0;
 
     // Building 4 bits address
     // (Potential problem if dec2binWcharfill not returning correct string)
-    char *sGroupCode;
+    const char *sGroupCode;
     switch(sGroup){
         case 'a':
         case 'A':
@@ -386,7 +386,8 @@ char* RCSwitch::getCodeWordD(char sGroup, int nDevice, boolean bStatus){
 
     // Building 3 bits address
     // (Potential problem if dec2binWcharfill not returning correct string)
-    char *sDevice;
+    
+    const char *sDevice;
     switch(nDevice) {
         case 1:
             sDevice = dec2binWcharfill(4, 3, 'F'); break;
@@ -420,7 +421,7 @@ char* RCSwitch::getCodeWordD(char sGroup, int nDevice, boolean bStatus){
 /**
  * @param sCodeWord   /^[10FS]*$/  -> see getCodeWord
  */
-void RCSwitch::sendTriState(char* sCodeWord) {
+void RCSwitch::sendTriState(const char* sCodeWord) {
   for (int nRepeat=0; nRepeat<nRepeatTransmit; nRepeat++) {
     int i = 0;
     while (sCodeWord[i] != '\0') {
@@ -445,7 +446,7 @@ void RCSwitch::send(unsigned long Code, unsigned int length) {
   this->send( this->dec2binWzerofill(Code, length) );
 }
 
-void RCSwitch::send(char* sCodeWord) {
+void RCSwitch::send(const char* sCodeWord) {
   for (int nRepeat=0; nRepeat<nRepeatTransmit; nRepeat++) {
     int i = 0;
     while (sCodeWord[i] != '\0') {
@@ -739,11 +740,11 @@ bool RCSwitch::receiveProtocol3(unsigned int changeCount){
 /**
   * Turns a decimal value to its binary representation
   */
-char* RCSwitch::dec2binWzerofill(unsigned long Dec, unsigned int bitLength){
+const char* RCSwitch::dec2binWzerofill(unsigned long Dec, unsigned int bitLength){
     return dec2binWcharfill(Dec, bitLength, '0');
 }
 
-char* RCSwitch::dec2binWcharfill(unsigned long Dec, unsigned int bitLength, char fill){
+const char* RCSwitch::dec2binWcharfill(unsigned long Dec, unsigned int bitLength, char fill){
   static char bin[64];
   unsigned int i=0;
 
