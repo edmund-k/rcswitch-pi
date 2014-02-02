@@ -30,7 +30,7 @@
 #else
     #include <wiringPi.h>
     #include <stdint.h>
-    #define NULL 0
+    #include <stddef.h>
     #define CHANGE 1
 #ifdef __cplusplus
 extern "C"{
@@ -71,7 +71,11 @@ class RCSwitch {
     void switchOff(const char* sGroup, const char* sDevice);
     void switchOn(char sGroup, int nDevice);
     void switchOff(char sGroup, int nDevice);
-    
+/*
+    // for REV switches 8342 BHC
+    void switchOn(const char* sGroup, int nDevice);
+    void switchOff(const char* sGroup, int nDevice);
+*/
     void sendTriState(const char* Code);
     void send(unsigned long Code, unsigned int length);
     void send(const char* Code);
@@ -102,6 +106,7 @@ class RCSwitch {
     const char* getCodeWordA(const char* sGroup, const char* sDevice, boolean bStatus);
     const char* getCodeWordC(char sFamily, int nGroup, int nDevice, boolean bStatus);
     const char* getCodeWordD(char group, int nDevice, boolean bStatus);
+    const char* getCodeWordE(const char* sGroup, int nDevice, boolean bStatus);
     void sendT0();
     void sendT1();
     void sendTF();
@@ -121,13 +126,13 @@ class RCSwitch {
     int nTransmitterPin;
     int nPulseLength;
     int nRepeatTransmit;
-  char nProtocol;
+    char nProtocol;
 
-  static int nReceiveTolerance;
+    static int nReceiveTolerance;
     static unsigned long nReceivedValue;
     static unsigned int nReceivedBitlength;
-  static unsigned int nReceivedDelay;
-  static unsigned int nReceivedProtocol;
+    static unsigned int nReceivedDelay;
+    static unsigned int nReceivedProtocol;
     static unsigned int timings[RCSWITCH_MAX_CHANGES];
 
     

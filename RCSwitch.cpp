@@ -24,9 +24,11 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+#include <cstring>
+
 #include "RCSwitch.h"
 
-unsigned long RCSwitch::nReceivedValue = NULL;
+unsigned long RCSwitch::nReceivedValue = 0;
 unsigned int RCSwitch::nReceivedBitlength = 0;
 unsigned int RCSwitch::nReceivedDelay = 0;
 unsigned int RCSwitch::nReceivedProtocol = 0;
@@ -36,7 +38,7 @@ int RCSwitch::nReceiveTolerance = 60;
 RCSwitch::RCSwitch() {
   this->nReceiverInterrupt = -1;
   this->nTransmitterPin = -1;
-  RCSwitch::nReceivedValue = NULL;
+  RCSwitch::nReceivedValue = 0;
   this->setPulseLength(350);
   this->setRepeatTransmit(10);
   this->setReceiveTolerance(60);
@@ -419,6 +421,50 @@ const char* RCSwitch::getCodeWordD(char sGroup, int nDevice, boolean bStatus){
 }
 
 /**
+ * Decoding for the REV Switch Type 8342-BHC
+ *
+ * Returns a char[13], representing the Tristate to be send.
+ * A Code Word consists of 7 address bits and 5 command data bits.
+ * A Code Bit can have 3 different states: "F" (floating), "0" (low), "1" (high)
+ *
+ * Source: none
+ *
+ * @param sGroup        Code read from the solder jumpers in the hand control
+ * @param nDevice       Number of the switch itself (1..3)
+ * @param bStatus       Whether to switch on (true) or off (false)
+ *
+ * @return char[13] 
+ */
+const char* getCodeWordE(const char *sGroup, int nDevice, boolean bStatus){
+  static char sReturn[13];
+  
+  strncpy(sReturn, sGroup, 7); // 7 digits system code
+  
+  int nReturnPos = 7;
+  const char *sDevice;
+  switch (nDevice ) {
+    case 1: sDevice = "F010"; break;
+    case 2: sDevice = "F100"; break;
+    case 3: sDevice = "1000"; break;
+    default:
+      sDevice = "0000";
+  }
+  for (int i = 0; i<strlen(sDevice); i++) {
+    sReturn[nReturnPos++] = sDevice[i];
+  }
+  
+  // encode on or off
+  if (bStatus)
+      sReturn[11] = '1';
+  else
+      sReturn[11] = '0';
+
+  // last position terminate string
+  sReturn[12] = '\0';
+  return sReturn;
+}
+
+/**
  * @param sCodeWord   /^[10FS]*$/  -> see getCodeWord
  */
 void RCSwitch::sendTriState(const char* sCodeWord) {
@@ -580,8 +626,8 @@ void RCSwitch::enableReceive(int interrupt) {
 
 void RCSwitch::enableReceive() {
   if (this->nReceiverInterrupt != -1) {
-    RCSwitch::nReceivedValue = NULL;
-    RCSwitch::nReceivedBitlength = NULL;
+    RCSwitch::nReceivedValue = 0;
+    RCSwitch::nReceivedBitlength = 0;
   }
 }
 
@@ -593,11 +639,11 @@ void RCSwitch::disableReceive() {
 }
 
 bool RCSwitch::available() {
-  return RCSwitch::nReceivedValue != NULL;
+  return RCSwitch::nReceivedValue != 0;
 }
 
 void RCSwitch::resetAvailable() {
-  RCSwitch::nReceivedValue = NULL;
+  RCSwitch::nReceivedValue = 0;
 }
 
 unsigned long RCSwitch::getReceivedValue() {
