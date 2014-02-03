@@ -71,11 +71,11 @@ class RCSwitch {
     void switchOff(const char* sGroup, const char* sDevice);
     void switchOn(char sGroup, int nDevice);
     void switchOff(char sGroup, int nDevice);
-/*
-    // for REV switches 8342 BHC
-    void switchOn(const char* sGroup, int nDevice);
-    void switchOff(const char* sGroup, int nDevice);
-*/
+
+    // for REV switches 8342 BHC, cannot overload existing methods
+    void switchOnBHC(const char* sGroup, int nDevice);
+    void switchOffBHC(const char* sGroup, int nDevice);
+
     void sendTriState(const char* Code);
     void send(unsigned long Code, unsigned int length);
     void send(const char* Code);

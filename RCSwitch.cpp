@@ -112,6 +112,26 @@ void RCSwitch::disableTransmit() {
 }
 
 /**
+ * Switch a remote switch on (Type REV BHC)
+ *
+ * @param sGroup        Code of the switch group (e.g. "00FFFFF")
+ * @param nDevice       Number of the switch itself (1..3)
+ */
+void RCSwitch::switchOnBHC(const char *sGroup, int nDevice) {
+  this->sendTriState( this->getCodeWordE(sGroup, nDevice, true) );
+}
+
+/**
+ * Switch a remote switch off (Type REV BHC)
+ *
+ * @param sGroup        Code of the switch group (e.g. "00FFFFF")
+ * @param nDevice       Number of the switch itself (1..3)
+ */
+void RCSwitch::switchOffBHC(const char *sGroup, int nDevice) {
+  this->sendTriState( this->getCodeWordE(sGroup, nDevice, false) );
+}
+
+/**
  * Switch a remote switch on (Type D REV)
  *
  * @param sGroup        Code of the switch group (A,B,C,D)
@@ -434,10 +454,18 @@ const char* RCSwitch::getCodeWordD(char sGroup, int nDevice, boolean bStatus){
  * @param bStatus       Whether to switch on (true) or off (false)
  *
  * @return char[13] 
+ *
+ * Note: The transmitters HS2260 have 7 soldering bridges where one could 
+ *       choose to set either a "0" or an "F". I havent't so far seen and 
+ *       possibility to set a "1".
+ *       At the receiver (socket) side, there are 5 possible soldering bridges
+ *       and two pins of the HS2272 are always left open (= "F").
  */
-const char* getCodeWordE(const char *sGroup, int nDevice, boolean bStatus){
+const char* RCSwitch::getCodeWordE(const char *sGroup, int nDevice, boolean bStatus){
   static char sReturn[13];
   
+  if ( strlen(sGroup) != 7 ) return '\0'; // error returns empty string
+
   strncpy(sReturn, sGroup, 7); // 7 digits system code
   
   int nReturnPos = 7;
