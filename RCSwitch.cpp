@@ -25,6 +25,9 @@
 */
 
 #include <cstring>
+#ifdef DEBUG
+ #include <cstdio>
+#endif // DEBUG
 
 #include "RCSwitch.h"
 
@@ -437,7 +440,6 @@ const char* RCSwitch::getCodeWordD(char sGroup, int nDevice, boolean bStatus){
     // last position terminate string
     sReturn[12] = '\0';
     return sReturn;
-
 }
 
 /**
@@ -489,6 +491,9 @@ const char* RCSwitch::getCodeWordE(const char *sGroup, int nDevice, boolean bSta
 
   // last position terminate string
   sReturn[12] = '\0';
+#ifdef DEBUG
+  printf("CodeWordE: '%s'\n", sReturn);
+#endif // DEBUG
   return sReturn;
 }
 

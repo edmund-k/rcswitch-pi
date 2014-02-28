@@ -1,3 +1,4 @@
+#DEBUG		= -g -DDEBUG
 DEBUG		= -g
 
 CCFLAGS		= $(DEBUG) -Wall
