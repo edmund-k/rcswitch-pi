@@ -479,7 +479,7 @@ const char* RCSwitch::getCodeWordE(const char *sGroup, int nDevice, boolean bSta
     default:
       sDevice = "0000";
   }
-  for (int i = 0; i<strlen(sDevice); i++) {
+  for (unsigned int i = 0; i<strlen(sDevice); i++) {
     sReturn[nReturnPos++] = sDevice[i];
   }
   
@@ -708,7 +708,7 @@ bool RCSwitch::receiveProtocol1(unsigned int changeCount){
       unsigned long delay = RCSwitch::timings[0] / 31;
       unsigned long delayTolerance = delay * RCSwitch::nReceiveTolerance * 0.01;
 
-      for (int i = 1; i<changeCount ; i=i+2) {
+      for (unsigned int i = 1; i<changeCount ; i=i+2) {
 
           if (RCSwitch::timings[i] > delay-delayTolerance && RCSwitch::timings[i] < delay+delayTolerance && RCSwitch::timings[i+1] > delay*3-delayTolerance && RCSwitch::timings[i+1] < delay*3+delayTolerance) {
             code = code << 1;
@@ -735,7 +735,7 @@ bool RCSwitch::receiveProtocol1(unsigned int changeCount){
     return true;
   }
 
-
+  return false;
 }
 
 bool RCSwitch::receiveProtocol2(unsigned int changeCount){
@@ -744,7 +744,7 @@ bool RCSwitch::receiveProtocol2(unsigned int changeCount){
       unsigned long delay = RCSwitch::timings[0] / 10;
       unsigned long delayTolerance = delay * RCSwitch::nReceiveTolerance * 0.01;
 
-      for (int i = 1; i<changeCount ; i=i+2) {
+      for (unsigned int i = 1; i<changeCount ; i=i+2) {
 
           if (RCSwitch::timings[i] > delay-delayTolerance && RCSwitch::timings[i] < delay+delayTolerance && RCSwitch::timings[i+1] > delay*2-delayTolerance && RCSwitch::timings[i+1] < delay*2+delayTolerance) {
             code = code << 1;
@@ -771,6 +771,7 @@ bool RCSwitch::receiveProtocol2(unsigned int changeCount){
     return true;
   }
 
+  return false;
 }
 
 /** Protocol 3 is used by BL35P02.
@@ -782,7 +783,7 @@ bool RCSwitch::receiveProtocol3(unsigned int changeCount){
       unsigned long delay = RCSwitch::timings[0] / PROTOCOL3_SYNC_FACTOR;
       unsigned long delayTolerance = delay * RCSwitch::nReceiveTolerance * 0.01;
 
-      for (int i = 1; i<changeCount ; i=i+2) {
+      for (unsigned int i = 1; i<changeCount ; i=i+2) {
 
           if  (RCSwitch::timings[i]   > delay*PROTOCOL3_0_HIGH_CYCLES - delayTolerance
             && RCSwitch::timings[i]   < delay*PROTOCOL3_0_HIGH_CYCLES + delayTolerance
@@ -814,6 +815,9 @@ bool RCSwitch::receiveProtocol3(unsigned int changeCount){
       }else if (code != 0){
         return true;
       }
+
+    
+  return false;
 }
 
 /**
