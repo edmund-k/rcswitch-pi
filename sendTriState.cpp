@@ -2,9 +2,10 @@
  Usage: ./sendTriState <String>
  */
 
-#include "RCSwitch.h"
 #include <stdlib.h>
 #include <stdio.h>
+
+#include "RCSwitch.h"
 
 int main(int argc, char *argv[]) {
     
@@ -17,12 +18,13 @@ int main(int argc, char *argv[]) {
     const char* tristate = argv[1];
     
     if (wiringPiSetup () == -1) return 1;
-	printf("sending tristate[%s] \n", tristate);
-	RCSwitch mySwitch = RCSwitch();
-	mySwitch.enableTransmit(PIN);
+
+    printf("sending tristate[%s] \n", tristate);
+    RCSwitch mySwitch = RCSwitch();
+    mySwitch.enableTransmit(PIN);
     mySwitch.setPulseLength(360);
 
     mySwitch.sendTriState(tristate);
 
-	return 0;
+    return 0;
 }
