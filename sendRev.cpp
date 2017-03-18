@@ -11,7 +11,7 @@
 #include "RCSwitch.h"
 
 int main(int argc, char *argv[]) {
-    
+
     /*
      output PIN is hardcoded for testing purposes
      see https://projects.drogon.net/raspberry-pi/wiringpi/pins/
@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     char* sGroup = argv[1];
     int nDevice = atoi(argv[2]);
     int command  = atoi(argv[3]);
-    
+
     if (wiringPiSetup () == -1) return 1;
 
     printf("sending sGroup[%s] nDevice[%i] command[%i]\n", sGroup, nDevice, command);

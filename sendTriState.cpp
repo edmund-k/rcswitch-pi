@@ -8,7 +8,7 @@
 #include "RCSwitch.h"
 
 int main(int argc, char *argv[]) {
-    
+
     /*
      output PIN is hardcoded for testing purposes
      see https://projects.drogon.net/raspberry-pi/wiringpi/pins/
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
      */
     int PIN = 0;
     const char* tristate = argv[1];
-    
+
     if (wiringPiSetup () == -1) return 1;
 
     printf("sending tristate[%s] \n", tristate);

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 
+#
 
 #Rev Typ B:
 #sudo ./sendTriState F1FF1FF00001

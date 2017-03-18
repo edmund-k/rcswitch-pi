@@ -14,7 +14,7 @@
 #include "RCSwitch.h"
 
 int main(int argc, char *argv[]) {
-    
+
     /*
      output PIN is hardcoded for testing purposes
      see https://projects.drogon.net/raspberry-pi/wiringpi/pins/
@@ -35,13 +35,13 @@ int main(int argc, char *argv[]) {
     const char* sGroup = argv[1];
     int nDevice = atoi(argv[2]);
     int command  = atoi(argv[3]);
-    
+
     if (wiringPiSetup () == -1) return 1;
 
     printf("sending sGroup[%s] nDevice[%i] command[%i]\n", sGroup, nDevice, command);
     RCSwitch mySwitch = RCSwitch();
     mySwitch.enableTransmit(PIN);
-    mySwitch.setPulseLength(150); // I tested 100 .. 250 us
+    mySwitch.setPulseLength(100); // I tested 100 .. 250 us
 
     switch(command) {
         case 1:
