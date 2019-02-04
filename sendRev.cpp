@@ -7,6 +7,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/stat.h>
 
 #include "RCSwitch.h"
 
@@ -24,7 +25,8 @@ int main(int argc, char *argv[]) {
 
     if (wiringPiSetup () == -1) return 1;
 
-    printf("sending sGroup[%s] nDevice[%i] command[%i]\n", sGroup, nDevice, command);
+    // removed stdout based debugging info 
+    //printf("sending sGroup[%s] nDevice[%i] command[%i]\n", sGroup, nDevice, command);
     RCSwitch mySwitch = RCSwitch();
     mySwitch.enableTransmit(PIN);
     //mySwitch.setPulseLength(360);
@@ -40,5 +42,21 @@ int main(int argc, char *argv[]) {
             printf("command[%i] is unsupported\n", command);
             return -1;
     }
+
+    // added persistent file based status info for readout by homebridge script 
+    char sBuffer[50];
+    system("mkdir -m 777 -p /tmp/rcswitch-pi/");
+    sprintf(sBuffer, "/tmp/rcswitch-pi/sendRev-%s-%i", sGroup, nDevice);
+
+    FILE* pFile;
+    pFile = fopen(sBuffer, "w");
+    chmod(sBuffer, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+
+    sprintf(sBuffer, "sending sGroup[%s] nDevice[%i] command[%i]\n", sGroup, nDevice, command);
+    printf(sBuffer);
+
+    fprintf(pFile, sBuffer);
+    fclose(pFile);
+
     return 0;
 }
